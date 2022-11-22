@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:flutter/services.dart';
 
 void main() => runApp(MyApp());
 
@@ -24,35 +24,81 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final ImagePicker _picker = ImagePicker();
+  final viewModel = MainViewModel();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            postApi();
-          },
-          child: Text('버튼'),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            viewModel.isLoading
+                ? const CircularProgressIndicator()
+                : Container(),
+            ElevatedButton(
+              onPressed: () async {
+                setState(() {
+                  viewModel.isLoading = true;
+                });
+
+                final bytes =
+                    await rootBundle.load('assets/1111111111111111.jpeg');
+                await viewModel.uploadImage(bytes.buffer.asUint8List());
+
+                setState(() {
+                  viewModel.isLoading = false;
+                });
+              },
+              child: const Text('업로드 파일'),
+            ),
+          ],
         ),
       ),
     );
   }
 }
 
-Future<dynamic> postApi(dynamic input) async {
-  var dio = new Dio();
-  try {
-    dio.options.contentType = 'multipart/form-data';
-    dio.options.maxRedirects.isFinite;
-    var response = await dio.patch(
+class FileApi {
+  final _dio = Dio();
+
+  Future<Response> uploadImage(
+    Uint8List image,
+  ) async {
+    final formData = FormData.fromMap({
+      'file': MultipartFile.fromBytes(image.buffer.asUint8List(),
+          filename: '1111111111111111.jpeg'),
+    });
+
+    final response = await _dio.post(
       'http://192.168.0.70:5001/fileUpload',
-      data: input,
+      data: formData,
     );
-    print('성공적으로 업로드했습니다');
-    return response.data;
-  } catch (e) {
-    print(e);
+
+    return response;
+  }
+}
+
+class FileRepository {
+  final _fileApi = FileApi();
+
+  Future<bool> uploadImage(Uint8List image) async {
+    try {
+      await _fileApi.uploadImage(image);
+      return true;
+    } catch (e) {
+      print(e.toString());
+      return false;
+    }
+  }
+}
+
+class MainViewModel {
+  final _repository = FileRepository();
+
+  var isLoading = false;
+
+  Future uploadImage(Uint8List image) async {
+    await _repository.uploadImage(image);
   }
 }
