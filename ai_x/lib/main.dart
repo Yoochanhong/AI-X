@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -23,25 +25,32 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final _picker = ImagePicker();
-  PickedFile? _image;
+  final picker = ImagePicker();
+  File? imageFile;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(),
+      body: Center(
+        child: imageFile != null
+            ? Container(
+                child: Image.file(imageFile!),
+              )
+            : Text('no image'),
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          _getImage();
+          getFromgallery();
         },
         child: Icon(Icons.camera_alt_sharp),
       ),
     );
   }
 
-  Future _getImage() async {
-    PickedFile? image = await _picker.getImage(source: ImageSource.gallery);
+  void getFromgallery() async {
+    PickedFile? pickedFile = await picker.getImage(source: ImageSource.gallery);
     setState(() {
-      _image = _image;
+      imageFile = File(pickedFile!.path);
     });
   }
 }
