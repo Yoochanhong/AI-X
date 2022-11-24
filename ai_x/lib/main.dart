@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 void main() => runApp(MyApp());
 
@@ -22,14 +23,25 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  final _picker = ImagePicker();
+  PickedFile? _image;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          _getImage();
+        },
         child: Icon(Icons.camera_alt_sharp),
       ),
     );
+  }
+
+  Future _getImage() async {
+    PickedFile? image = await _picker.getImage(source: ImageSource.gallery);
+    setState(() {
+      _image = _image;
+    });
   }
 }
