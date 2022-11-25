@@ -1,7 +1,9 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 
 void main() => runApp(MyApp());
@@ -11,9 +13,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: MyHomePage(),
+    return ScreenUtilInit(
+      designSize: Size(7.5, 15),
+      builder: (context, child) => MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: MyHomePage(),
+      ),
     );
   }
 }
@@ -37,16 +42,30 @@ class _MyHomePageState extends State<MyHomePage> {
         child: image != null
             ? Container(
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Container(
-                      width: 500,
-                      height: 500,
-                      child: Image.file(File(image!.path)),
+                      width: 6.0.w,
+                      height: 6.0.h,
+                      child: Image.file(
+                        File(image!.path),
+                        fit: BoxFit.fill,
+                      ),
                     ),
                   ],
                 ),
               )
-            : Text('no image'),
+            : DottedBorder(
+                child: Container(
+                  width: 6.0.w,
+                  height: 6.0.w,
+                  child: Center(child: Text('이미지를 업로드해주세요.')),
+                ),
+                dashPattern: [5, 3],
+                color: Colors.black,
+                borderType: BorderType.RRect,
+                radius: Radius.circular(10.0),
+              ),
       ),
       floatingActionButton: image != null
           ? FloatingActionButton(
