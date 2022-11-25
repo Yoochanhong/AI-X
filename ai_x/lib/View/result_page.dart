@@ -26,22 +26,22 @@ class _ResultPageState extends State<ResultPage> {
           future: priceData,
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
-              return const Center(child: Text('요청하신 데이터를 받아오지 못했어요 ㅠ'));
+              return const Center(child: Text('데이터를 받아오는 중...'));
             }
             return Center(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('XX한 면적 : ' +snapshot.data!.crushed!.area.toString()),
-                  Text('XX한 면적의 예상가격 : ' + snapshot.data!.crushed!.price.toString()),
-                  Text('XX한 면적 : ' + snapshot.data!.damaged!.area.toString()),
-                  Text('XX한 면적의 예상가격 : ' + snapshot.data!.damaged!.price.toString()),
-                  Text('XX한 면적 : ' + snapshot.data!.scratched!.area.toString()),
-                  Text('XX한 면적의 예상가격 : ' + snapshot.data!.scratched!.price.toString()),
-                  Text('XX한 면적 : ' + snapshot.data!.seperationed!.area.toString()),
-                  Text('XX한 면적의 예상가격 : ' + snapshot.data!.seperationed!.price.toString()),
-                  Text('총 가격 : ' + snapshot.data!.totalPrice.toString()),
+                  Text('긁힌 면적 : ' +snapshot.data!.crushed!.area.toString() + 'px'),
+                  Text('긁힌 면적의 예상가격 : ' + snapshot.data!.crushed!.price.toString() + '원'),
+                  Text('이격된 면적 : ' + snapshot.data!.damaged!.area.toString() + 'px'),
+                  Text('이격된 면적의 예상가격 : ' + snapshot.data!.damaged!.price.toString() +'원'),
+                  Text('찌그러진 면적 : ' + snapshot.data!.scratched!.area.toString() + 'px'),
+                  Text('찌그러진 면적의 예상가격 : ' + snapshot.data!.scratched!.price.toString() + '원'),
+                  Text('파손된 면적 : ' + snapshot.data!.seperationed!.area.toString() + 'px'),
+                  Text('파손된 면적의 예상가격 : ' + snapshot.data!.seperationed!.price.toString() + '원'),
+                  Text('총 가격 : ' + snapshot.data!.totalPrice.toString() + '원'),
                 ],
               ),
             );
