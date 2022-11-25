@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:dio/dio.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
@@ -120,5 +119,19 @@ class _MyHomePageState extends State<MyHomePage> {
     } catch (e) {
       print(e);
     }
+  }
+}
+
+class NextPage extends StatefulWidget {
+  const NextPage({Key? key}) : super(key: key);
+
+  @override
+  State<NextPage> createState() => _NextPageState();
+}
+
+class _NextPageState extends State<NextPage> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold();
   }
 }
