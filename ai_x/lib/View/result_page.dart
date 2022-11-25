@@ -29,7 +29,22 @@ class _ResultPageState extends State<ResultPage> {
               return const Center(child: Text('요청하신 데이터를 받아오지 못했어요 ㅠ'));
             }
             return Center(
-                child: Text(snapshot.data!.totalPrice.toString() + '원'));
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('XX한 면적 : ' +snapshot.data!.crushed!.area.toString()),
+                  Text('XX한 면적의 예상가격 : ' + snapshot.data!.crushed!.price.toString()),
+                  Text('XX한 면적 : ' + snapshot.data!.damaged!.area.toString()),
+                  Text('XX한 면적의 예상가격 : ' + snapshot.data!.damaged!.price.toString()),
+                  Text('XX한 면적 : ' + snapshot.data!.scratched!.area.toString()),
+                  Text('XX한 면적의 예상가격 : ' + snapshot.data!.scratched!.price.toString()),
+                  Text('XX한 면적 : ' + snapshot.data!.seperationed!.area.toString()),
+                  Text('XX한 면적의 예상가격 : ' + snapshot.data!.seperationed!.price.toString()),
+                  Text('총 가격 : ' + snapshot.data!.totalPrice.toString()),
+                ],
+              ),
+            );
           },
         ),
       ),
