@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -15,8 +15,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
-      designSize: Size(7.5, 15),
-      builder: (context, child) => MaterialApp(
+      designSize: const Size(7.5, 15),
+      builder: (context, child) => const MaterialApp(
         debugShowCheckedModeBanner: false,
         home: MyHomePage(),
       ),
@@ -42,35 +42,33 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       body: Center(
         child: image != null
-            ? Container(
-                child: Stack(
-                  children: [
-                    Center(
-                      child: Container(
-                        width: 6.0.w,
-                        height: 6.0.h,
-                        child: Image.file(
-                          File(image!.path),
-                          fit: BoxFit.fill,
-                        ),
-                      ),
+            ? Stack(
+              children: [
+                Center(
+                  child: SizedBox(
+                    width: 6.0.w,
+                    height: 6.0.h,
+                    child: Image.file(
+                      File(image!.path),
+                      fit: BoxFit.fill,
                     ),
-                    isUplode == false
-                        ? Center(child: const CircularProgressIndicator())
-                        : Container(),
-                  ],
+                  ),
                 ),
-              )
+                isUplode == false
+                    ? const Center(child: CircularProgressIndicator())
+                    : Container(),
+              ],
+            )
             : DottedBorder(
-                child: Container(
+                child: SizedBox(
                   width: 6.0.w,
                   height: 6.0.w,
-                  child: Center(child: Text('이미지를 업로드해주세요.')),
+                  child: const Center(child: Text('이미지를 업로드해주세요.')),
                 ),
-                dashPattern: [5, 3],
+                dashPattern: const [5, 3],
                 color: Colors.black,
                 borderType: BorderType.RRect,
-                radius: Radius.circular(10.0),
+                radius: const Radius.circular(10.0),
               ),
       ),
       floatingActionButton: image != null
@@ -81,19 +79,19 @@ class _MyHomePageState extends State<MyHomePage> {
                   onPressed: () {
                     getImageFromGallery(ImageSource.gallery);
                   },
-                  child: Icon(Icons.refresh),
+                  child: const Icon(Icons.refresh),
                 ),
-                SizedBox(width: 10),
+                const SizedBox(width: 10),
                 FloatingActionButton(
                   onPressed: () async {
                     ImagePost(image!);
-                    await Future.delayed(Duration(seconds: 5));
+                    await Future.delayed(const Duration(seconds: 5));
                     Navigator.of(context)
                         .push(MaterialPageRoute(builder: (context) {
                       return NextPage();
                     }));
                   },
-                  child: Icon(Icons.send),
+                  child: const Icon(Icons.send),
                 ),
               ],
             )
@@ -101,7 +99,7 @@ class _MyHomePageState extends State<MyHomePage> {
               onPressed: () {
                 getImageFromGallery(ImageSource.gallery);
               },
-              child: Icon(Icons.camera_alt_sharp),
+              child: const Icon(Icons.camera_alt_sharp),
             ),
     );
   }
@@ -111,9 +109,9 @@ class _MyHomePageState extends State<MyHomePage> {
       isUplode = false;
     });
     print("사진을 서버에 업로드 합니다.");
-    var dio = new Dio();
+    var dio = Dio();
     var formData =
-        FormData.fromMap({'file': await MultipartFile.fromFile(input!.path)});
+        FormData.fromMap({'file': await MultipartFile.fromFile(input.path)});
     try {
       dio.options.contentType = 'multipart/form-data';
       dio.options.maxRedirects.isFinite;
