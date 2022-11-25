@@ -1,4 +1,3 @@
-import 'package:ai_x/Model/price.dart';
 import 'package:ai_x/View/result_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -61,7 +60,10 @@ class NextPage extends StatelessWidget {
                     return ResultPage();
                   }));
                 },
-                child: Text('견적 알아보러 가기'),
+                child: Text(
+                  '견적 알아보러 가기',
+                  style: TextStyle(fontSize: 17),
+                ),
               ),
             ),
           ],
