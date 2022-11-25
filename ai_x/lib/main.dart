@@ -157,26 +157,3 @@ class NextPage extends StatelessWidget {
     );
   }
 }
-
-class LodingPage extends StatelessWidget {
-  const LodingPage({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: [
-          Center(
-            child: Text(
-              '이미지 보내는중...',
-              style: TextStyle(
-                fontSize: 20,
-              ),
-            ),
-          ),
-          Center(child: CircularProgressIndicator()),
-        ],
-      ),
-    );
-  }
-}
