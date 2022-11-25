@@ -6,6 +6,7 @@ import 'package:dio/dio.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 
 enum CarSize { LightCar, CompectCar, MiddleCar, LargeCar }
@@ -38,7 +39,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final picker = ImagePicker();
   XFile? image;
   String fileUploadUrl = 'http://192.168.50.219:5001/fileUpload';
-  String intValueUploadUrl = 'http://192.168.50.219:5001/intUpload';
+  String intValueUploadUrl = 'http://192.168.50.219:5001/intUpload/';
   bool isUplode = true;
   CarSize? carSize = CarSize.LightCar;
 
@@ -75,7 +76,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         ),
                       ),
                       isUplode == false
-                          ? Center(child: CircularProgressIndicator())
+                          ? CircularProgressIndicator()
                           : Container(),
                     ],
                   ),
@@ -165,6 +166,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 FloatingActionButton(
                   heroTag: 'send',
                   onPressed: () async {
+                    await TextPost();
                     ImagePost(image!);
                     await Future.delayed(const Duration(seconds: 4));
                     Navigator.of(context)
@@ -186,17 +188,21 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  Future<dynamic> ImagePost(XFile input) async {
+  Future<dynamic> TextPost() async {
     setState(() {
       isUplode = false;
     });
+    print('인덱스를 서버에 업로드 합니다.');
+    print(getEnumIndex(carSize));
+    var responseQuery =
+        await http.get(Uri.parse(intValueUploadUrl + getEnumIndex(carSize)));
+  }
+
+  Future<dynamic> ImagePost(XFile input) async {
     print("사진을 서버에 업로드 합니다.");
     var dio = Dio();
-    var dioInt = Dio();
     var formData =
         FormData.fromMap({'file': await MultipartFile.fromFile(input.path)});
-    var formDataInt = FormData.fromMap({'num': getEnumIndex(carSize)});
-    print(getEnumIndex(carSize));
     try {
       dio.options.contentType = 'multipart/form-data';
       dio.options.maxRedirects.isFinite;
@@ -204,22 +210,10 @@ class _MyHomePageState extends State<MyHomePage> {
         fileUploadUrl,
         data: formData,
       );
-    } catch (e) {
-      print(e);
-    }
-    setState(() {
-      isUplode = true;
-    });
-    try {
-      dioInt.options.contentType = 'text/plain';
-      var responseInt = await dioInt.post(
-        intValueUploadUrl,
-        data: formDataInt,
-      );
-      print('성공적으로 업로드했습니다');
       setState(() {
         isUplode = true;
       });
+      print('성공적으로 업로드했습니다');
     } catch (e) {
       print(e);
     }
