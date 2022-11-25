@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -26,8 +27,8 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final picker = ImagePicker();
-  File? image;
-  Icon? icon;
+  XFile? image;
+  String fileUploadUrl = 'http://192.168.50.219:5001/fileUpload';
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +38,11 @@ class _MyHomePageState extends State<MyHomePage> {
             ? Container(
                 child: Column(
                   children: [
-                    Image.file(image!),
+                    Container(
+                      width: 500,
+                      height: 500,
+                      child: Image.file(File(image!.path)),
+                    ),
                   ],
                 ),
               )
@@ -45,7 +50,9 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       floatingActionButton: image != null
           ? FloatingActionButton(
-              onPressed: () {},
+              onPressed: () {
+                ImagePost(image!);
+              },
               child: Icon(Icons.send),
             )
           : FloatingActionButton(
@@ -58,9 +65,29 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future getImageFromGallery(ImageSource imageSource) async {
-    final pickedFile = await picker.getImage(source: imageSource);
+    final pickedFile =
+        await picker.getImage(source: imageSource, imageQuality: 100);
     setState(() {
-      image = File(pickedFile!.path);
+      image = XFile(pickedFile!.path);
     });
+  }
+
+  void ImagePost(XFile input) async {
+    print("사진을 서버에 업로드 합니다.");
+    var dio = new Dio();
+    var formData =
+        FormData.fromMap({'file': await MultipartFile.fromFile(input!.path)});
+    try {
+      dio.options.contentType = 'multipart/form-data';
+      dio.options.maxRedirects.isFinite;
+      var response = await dio.post(
+        fileUploadUrl,
+        data: formData,
+      );
+      print('성공적으로 업로드했습니다');
+      return response.data;
+    } catch (e) {
+      print(e);
+    }
   }
 }
