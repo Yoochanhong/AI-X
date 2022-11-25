@@ -76,7 +76,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         ),
                       ),
                       isUplode == false
-                          ? CircularProgressIndicator()
+                          ? const Center(child: CircularProgressIndicator())
                           : Container(),
                     ],
                   ),
@@ -85,7 +85,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     children: [
                       Column(
                         children: [
-                          Text('경차'),
+                          const Text('경차'),
                           Radio<CarSize>(
                               value: CarSize.LightCar,
                               groupValue: carSize,
@@ -98,7 +98,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                       Column(
                         children: [
-                          Text('소형'),
+                          const Text('소형'),
                           Radio<CarSize>(
                               value: CarSize.CompectCar,
                               groupValue: carSize,
@@ -111,7 +111,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                       Column(
                         children: [
-                          Text('중형'),
+                          const Text('중형'),
                           Radio<CarSize>(
                               value: CarSize.MiddleCar,
                               groupValue: carSize,
@@ -124,7 +124,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                       Column(
                         children: [
-                          Text('대형'),
+                          const Text('대형'),
                           Radio<CarSize>(
                               value: CarSize.LargeCar,
                               groupValue: carSize,
@@ -158,7 +158,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 FloatingActionButton(
                   heroTag: 'gallery retry',
                   onPressed: () {
-                    getImageFromGallery(ImageSource.gallery);
+                    getImage(ImageSource.gallery);
                   },
                   child: const Icon(Icons.refresh),
                 ),
@@ -166,9 +166,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 FloatingActionButton(
                   heroTag: 'send',
                   onPressed: () async {
-                    await TextPost();
-                    ImagePost(image!);
-                    await Future.delayed(const Duration(seconds: 4));
+                    await textPost();
+                    imagePost(image!);
                     Navigator.of(context)
                         .push(MaterialPageRoute(builder: (context) {
                       return NextPage();
@@ -178,17 +177,30 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ],
             )
-          : FloatingActionButton(
-              heroTag: 'gallery',
-              onPressed: () {
-                getImageFromGallery(ImageSource.gallery);
-              },
-              child: const Icon(Icons.camera_alt_sharp),
+          : Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                FloatingActionButton(
+                  heroTag: 'camera',
+                  onPressed: () {
+                    getImage(ImageSource.camera);
+                  },
+                  child: const Icon(Icons.camera_alt_sharp),
+                ),
+                const SizedBox(width: 10),
+                FloatingActionButton(
+                  heroTag: 'gallery',
+                  onPressed: () {
+                    getImage(ImageSource.gallery);
+                  },
+                  child: const Icon(Icons.photo),
+                ),
+              ],
             ),
     );
   }
 
-  Future<dynamic> TextPost() async {
+  Future<dynamic> textPost() async {
     setState(() {
       isUplode = false;
     });
@@ -198,7 +210,7 @@ class _MyHomePageState extends State<MyHomePage> {
         await http.get(Uri.parse(intValueUploadUrl + getEnumIndex(carSize)));
   }
 
-  Future<dynamic> ImagePost(XFile input) async {
+  Future<dynamic> imagePost(XFile input) async {
     print("사진을 서버에 업로드 합니다.");
     var dio = Dio();
     var formData =
@@ -219,7 +231,7 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  Future getImageFromGallery(ImageSource imageSource) async {
+  Future<void> getImage(ImageSource imageSource) async {
     final pickedFile =
         await picker.getImage(source: imageSource, imageQuality: 100);
     setState(() {
