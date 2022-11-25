@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:ai_x/Model/price.dart';
 
 class ResultPage extends StatelessWidget {
-  const ResultPage({Key? key}) : super(key: key);
+  ResultPage({Key? key, required this.priceData}) : super(key: key);
+
+  Future<Price>? priceData;
 
   @override
   Widget build(BuildContext context) {

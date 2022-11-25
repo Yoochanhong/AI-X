@@ -1,6 +1,8 @@
+import 'package:ai_x/ViewModel/get_price.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:ai_x/View/result_page.dart';
+import 'package:ai_x/Model/price.dart';
 
 class NextPage extends StatelessWidget {
   NextPage({Key? key}) : super(key: key);
@@ -11,6 +13,8 @@ class NextPage extends StatelessWidget {
     2: '찌그러진 부분',
     3: '파손된 부분',
   };
+
+  Future<Price>? priceData;
 
   String getWhat(int index) {
     String wWwWhat = what[index]!;
@@ -55,9 +59,10 @@ class NextPage extends StatelessWidget {
               height: 1.0.h,
               child: ElevatedButton(
                 onPressed: () {
+                  priceData = getPrice();
                   Navigator.of(context)
                       .push(MaterialPageRoute(builder: (context) {
-                    return ResultPage();
+                    return ResultPage(priceData: priceData);
                   }));
                 },
                 child: Text('견적 알아보러 가기'),
