@@ -140,20 +140,41 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 
 class NextPage extends StatelessWidget {
-  const NextPage({Key? key}) : super(key: key);
+  NextPage({Key? key}) : super(key: key);
+
+  var what = {
+    0: '긁힌 부분',
+    1: '이격된 부분',
+    2: '찌그러진 부분',
+    3: '파손된 부분',
+  };
+
+  String getWhat(int index) {
+    String wWwWhat = what[index]!;
+    return wWwWhat;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: PageView.builder(
-          controller: PageController(
-            initialPage: 0,
-          ),
-          itemCount: 4,
-          itemBuilder: (BuildContext context, int index) {
-            return Image.network(
-                'http://192.168.50.219:5001/static/images/${index}_image.png');
-          }),
+      body: Center(
+        child: PageView.builder(
+            controller: PageController(
+              initialPage: 0,
+            ),
+            itemCount: 4,
+            itemBuilder: (BuildContext context, int index) {
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(getWhat(index)),
+                  Image.network(
+                    'http://192.168.50.219:5001/static/images/${index}_image.png',
+                  ),
+                ],
+              );
+            }),
+      ),
     );
   }
 }
