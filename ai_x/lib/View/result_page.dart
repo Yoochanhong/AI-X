@@ -33,15 +33,72 @@ class _ResultPageState extends State<ResultPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('긁힌 면적 : ' +snapshot.data!.crushed!.area.toString() + 'px'),
-                  Text('긁힌 면적의 예상가격 : ' + snapshot.data!.crushed!.price.toString() + '원'),
-                  Text('이격된 면적 : ' + snapshot.data!.damaged!.area.toString() + 'px'),
-                  Text('이격된 면적의 예상가격 : ' + snapshot.data!.damaged!.price.toString() +'원'),
-                  Text('찌그러진 면적 : ' + snapshot.data!.scratched!.area.toString() + 'px'),
-                  Text('찌그러진 면적의 예상가격 : ' + snapshot.data!.scratched!.price.toString() + '원'),
-                  Text('파손된 면적 : ' + snapshot.data!.seperationed!.area.toString() + 'px'),
-                  Text('파손된 면적의 예상가격 : ' + snapshot.data!.seperationed!.price.toString() + '원'),
-                  Text('총 가격 : ' + snapshot.data!.totalPrice.toString() + '원'),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      '긁힌 면적 : ' +
+                          snapshot.data!.crushed!.area.toString() +
+                          'px',
+                      style: TextStyle(fontSize: 15),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      '긁힌 면적의 예상가격 : ' +
+                          snapshot.data!.crushed!.price.toString() +
+                          '원',
+                      style: TextStyle(fontSize: 15),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text('이격된 면적 : ' +
+                        snapshot.data!.damaged!.area.toString() +
+                        'px',
+                      style: TextStyle(fontSize: 15),),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text('이격된 면적의 예상가격 : ' +
+                        snapshot.data!.damaged!.price.toString() +
+                        '원',
+                      style: TextStyle(fontSize: 15),),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text('찌그러진 면적 : ' +
+                        snapshot.data!.scratched!.area.toString() +
+                        'px',
+                      style: TextStyle(fontSize: 15),),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text('찌그러진 면적의 예상가격 : ' +
+                        snapshot.data!.scratched!.price.toString() +
+                        '원',
+                      style: TextStyle(fontSize: 15),),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text('파손된 면적 : ' +
+                        snapshot.data!.seperationed!.area.toString() +
+                        'px',
+                      style: TextStyle(fontSize: 15),),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text('파손된 면적의 예상가격 : ' +
+                        snapshot.data!.seperationed!.price.toString() +
+                        '원',
+                      style: TextStyle(fontSize: 15),),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 50.0),
+                    child: Text(
+                        '총 가격 : ' + snapshot.data!.totalPrice.toString() + '원',
+                      style: TextStyle(fontSize: 30),),
+                  ),
                 ],
               ),
             );
