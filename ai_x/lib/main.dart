@@ -68,11 +68,23 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
       ),
       floatingActionButton: image != null
-          ? FloatingActionButton(
-              onPressed: () {
-                ImagePost(image!);
-              },
-              child: Icon(Icons.send),
+          ? Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                FloatingActionButton(
+                  onPressed: () {
+                    getImageFromGallery(ImageSource.gallery);
+                  },
+                  child: Icon(Icons.refresh),
+                ),
+                SizedBox(width: 10),
+                FloatingActionButton(
+                  onPressed: () {
+                    ImagePost(image!);
+                  },
+                  child: Icon(Icons.send),
+                ),
+              ],
             )
           : FloatingActionButton(
               onPressed: () {
