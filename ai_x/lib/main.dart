@@ -26,31 +26,41 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final picker = ImagePicker();
-  File? imageFile;
+  File? image;
+  Icon? icon;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: imageFile != null
+        child: image != null
             ? Container(
-                child: Image.file(imageFile!),
+                child: Column(
+                  children: [
+                    Image.file(image!),
+                  ],
+                ),
               )
             : Text('no image'),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          getFromgallery();
-        },
-        child: Icon(Icons.camera_alt_sharp),
-      ),
+      floatingActionButton: image != null
+          ? FloatingActionButton(
+              onPressed: () {},
+              child: Icon(Icons.send),
+            )
+          : FloatingActionButton(
+              onPressed: () {
+                getImageFromGallery(ImageSource.gallery);
+              },
+              child: Icon(Icons.camera_alt_sharp),
+            ),
     );
   }
 
-  void getFromgallery() async {
-    PickedFile? pickedFile = await picker.getImage(source: ImageSource.gallery);
+  Future getImageFromGallery(ImageSource imageSource) async {
+    final pickedFile = await picker.getImage(source: imageSource);
     setState(() {
-      imageFile = File(pickedFile!.path);
+      image = File(pickedFile!.path);
     });
   }
 }
