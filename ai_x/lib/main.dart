@@ -80,6 +80,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 FloatingActionButton(
                   onPressed: () {
                     ImagePost(image!);
+                    Navigator.of(context).push(MaterialPageRoute(builder: (context){
+                      return NextPage();
+                    }));
                   },
                   child: Icon(Icons.send),
                 ),
@@ -102,7 +105,7 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  void ImagePost(XFile input) async {
+  Future<dynamic> ImagePost(XFile input) async {
     print("사진을 서버에 업로드 합니다.");
     var dio = new Dio();
     var formData =
@@ -115,7 +118,6 @@ class _MyHomePageState extends State<MyHomePage> {
         data: formData,
       );
       print('성공적으로 업로드했습니다');
-      return response.data;
     } catch (e) {
       print(e);
     }
