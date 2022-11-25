@@ -1,4 +1,6 @@
+import 'dart:async';
 import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
@@ -33,6 +35,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final picker = ImagePicker();
   XFile? image;
   String fileUploadUrl = 'http://192.168.50.219:5001/fileUpload';
+  bool isUplode = true;
 
   @override
   Widget build(BuildContext context) {
@@ -40,17 +43,21 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         child: image != null
             ? Container(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                child: Stack(
                   children: [
-                    Container(
-                      width: 6.0.w,
-                      height: 6.0.h,
-                      child: Image.file(
-                        File(image!.path),
-                        fit: BoxFit.fill,
+                    Center(
+                      child: Container(
+                        width: 6.0.w,
+                        height: 6.0.h,
+                        child: Image.file(
+                          File(image!.path),
+                          fit: BoxFit.fill,
+                        ),
                       ),
                     ),
+                    isUplode == false
+                        ? Center(child: const CircularProgressIndicator())
+                        : Container(),
                   ],
                 ),
               )
@@ -78,9 +85,11 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 SizedBox(width: 10),
                 FloatingActionButton(
-                  onPressed: () {
+                  onPressed: () async {
                     ImagePost(image!);
-                    Navigator.of(context).push(MaterialPageRoute(builder: (context){
+                    await Future.delayed(Duration(seconds: 5));
+                    Navigator.of(context)
+                        .push(MaterialPageRoute(builder: (context) {
                       return NextPage();
                     }));
                   },
@@ -97,15 +106,10 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  Future getImageFromGallery(ImageSource imageSource) async {
-    final pickedFile =
-        await picker.getImage(source: imageSource, imageQuality: 100);
-    setState(() {
-      image = XFile(pickedFile!.path);
-    });
-  }
-
   Future<dynamic> ImagePost(XFile input) async {
+    setState(() {
+      isUplode = false;
+    });
     print("사진을 서버에 업로드 합니다.");
     var dio = new Dio();
     var formData =
@@ -118,22 +122,61 @@ class _MyHomePageState extends State<MyHomePage> {
         data: formData,
       );
       print('성공적으로 업로드했습니다');
+      setState(() {
+        isUplode = true;
+      });
     } catch (e) {
       print(e);
     }
   }
+
+  Future getImageFromGallery(ImageSource imageSource) async {
+    final pickedFile =
+        await picker.getImage(source: imageSource, imageQuality: 100);
+    setState(() {
+      image = XFile(pickedFile!.path);
+    });
+  }
 }
 
-class NextPage extends StatefulWidget {
+class NextPage extends StatelessWidget {
   const NextPage({Key? key}) : super(key: key);
 
   @override
-  State<NextPage> createState() => _NextPageState();
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: PageView.builder(
+          controller: PageController(
+            initialPage: 0,
+          ),
+          itemCount: 4,
+          itemBuilder: (BuildContext context, int index) {
+            return Image.network(
+                'http://192.168.50.219:5001/static/images/${index}_image.png');
+          }),
+    );
+  }
 }
 
-class _NextPageState extends State<NextPage> {
+class LodingPage extends StatelessWidget {
+  const LodingPage({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return Scaffold(
+      body: Stack(
+        children: [
+          Center(
+            child: Text(
+              '이미지 보내는중...',
+              style: TextStyle(
+                fontSize: 20,
+              ),
+            ),
+          ),
+          Center(child: CircularProgressIndicator()),
+        ],
+      ),
+    );
   }
 }
