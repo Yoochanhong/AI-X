@@ -43,22 +43,22 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         child: image != null
             ? Stack(
-              children: [
-                Center(
-                  child: SizedBox(
-                    width: 6.0.w,
-                    height: 6.0.h,
-                    child: Image.file(
-                      File(image!.path),
-                      fit: BoxFit.fill,
+                children: [
+                  Center(
+                    child: SizedBox(
+                      width: 6.0.w,
+                      height: 6.0.h,
+                      child: Image.file(
+                        File(image!.path),
+                        fit: BoxFit.fill,
+                      ),
                     ),
                   ),
-                ),
-                isUplode == false
-                    ? const Center(child: CircularProgressIndicator())
-                    : Container(),
-              ],
-            )
+                  isUplode == false
+                      ? const Center(child: CircularProgressIndicator())
+                      : Container(),
+                ],
+              )
             : DottedBorder(
                 child: SizedBox(
                   width: 6.0.w,
@@ -156,23 +156,56 @@ class NextPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: PageView.builder(
-            controller: PageController(
-              initialPage: 0,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              width: 7.5.w,
+              height: 10.0.h,
+              child: PageView.builder(
+                controller:
+                    PageController(initialPage: 0, viewportFraction: 0.8),
+                itemCount: 4,
+                itemBuilder: (BuildContext context, int index) {
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        getWhat(index),
+                        style: TextStyle(fontSize: 20),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Image.network(
+                          'http://192.168.50.219:5001/static/images/${index}_image.png',
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              ),
             ),
-            itemCount: 4,
-            itemBuilder: (BuildContext context, int index) {
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(getWhat(index)),
-                  Image.network(
-                    'http://192.168.50.219:5001/static/images/${index}_image.png',
-                  ),
-                ],
-              );
-            }),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (context) {
+                  return ResultPage();
+                }));
+              },
+              child: Text('견적 알아보러 가기'),
+            ),
+          ],
+        ),
       ),
     );
+  }
+}
+
+class ResultPage extends StatelessWidget {
+  const ResultPage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold();
   }
 }
