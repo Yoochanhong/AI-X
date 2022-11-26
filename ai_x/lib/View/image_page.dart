@@ -41,8 +41,10 @@ class NextPage extends StatelessWidget {
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Image.network(
-                          'http://192.168.50.219:5001/static/images/${index}_image.png',
+                        child: Container(
+                          child: Image.network(
+                            'http://192.168.50.219:5001/static/images/${index}_image.png',
+                          ),
                         ),
                       ),
                     ],

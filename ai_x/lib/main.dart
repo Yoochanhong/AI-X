@@ -76,7 +76,13 @@ class _MyHomePageState extends State<MyHomePage> {
                         ),
                       ),
                       isUplode == false
-                          ? const Center(child: CircularProgressIndicator())
+                          ? Center(
+                              child: SizedBox(
+                                width: 70,
+                                height: 70,
+                                child: CircularProgressIndicator(),
+                              ),
+                            )
                           : Container(),
                     ],
                   ),
@@ -139,16 +145,28 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 ],
               )
-            : DottedBorder(
-                child: SizedBox(
-                  width: 6.0.w,
-                  height: 6.0.w,
-                  child: const Center(child: Text('이미지를 업로드해주세요.')),
-                ),
-                dashPattern: const [5, 3],
-                color: Colors.black,
-                borderType: BorderType.RRect,
-                radius: const Radius.circular(10.0),
+            : Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 10),
+                    child: Text(
+                      '50cm 떨어진 거리에서 1배율로 사진을 찍으면 더 정확하게 나와요!',
+                      style: TextStyle(fontSize: 12),
+                    ),
+                  ),
+                  DottedBorder(
+                    child: SizedBox(
+                      width: 6.0.w,
+                      height: 6.0.w,
+                      child: const Center(child: Text('이미지를 업로드해주세요.')),
+                    ),
+                    dashPattern: const [5, 3],
+                    color: Colors.black,
+                    borderType: BorderType.RRect,
+                    radius: const Radius.circular(10.0),
+                  ),
+                ],
               ),
       ),
       floatingActionButton: image != null
@@ -167,8 +185,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   heroTag: 'send',
                   onPressed: () async {
                     await textPost();
-                    imagePost(image!);
-                    Navigator.of(context)
+                    await imagePost(image!);
+                    Future.delayed(Duration(milliseconds: 200));
+                    await Navigator.of(context)
                         .push(MaterialPageRoute(builder: (context) {
                       return NextPage();
                     }));
